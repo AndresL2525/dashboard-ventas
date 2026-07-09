@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+/* ─── Contenedor ─────────────────────────────────────────── */
+.tabla-contenedor {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    font-family: 'Syne', sans-serif;
+    animation: tablaEntrada 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    overflow: hidden;
+}
+
+@keyframes tablaEntrada {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Título ─────────────────────────────────────────────── */
+.tabla-contenedor h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tabla-contenedor h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1rem;
+    background: linear-gradient(180deg, #2e75b6, #1e50a2);
+    border-radius: 100px;
+    flex-shrink: 0;
+}
+
+/* ─── Tabla ──────────────────────────────────────────────── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* ─── Encabezado ─────────────────────────────────────────── */
+thead tr {
+    background: linear-gradient(135deg, #2e75b6, #1e50a2);
+    border-radius: 10px;
+}
+
+thead th {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+thead th:first-child { border-radius: 10px 0 0 10px; }
+thead th:last-child  { border-radius: 0 10px 10px 0; text-align: right; }
+
+/* ─── Filas ──────────────────────────────────────────────── */
+tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.045);
+    transition:
+        background 150ms ease,
+        transform  150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: default;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: #f1f7fd;
+    transform: translateX(3px);
+}
+
+/* Entrada escalonada de filas */
+tbody tr {
+    animation: filaEntrada 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+tbody tr:nth-child(1)  { animation-delay: 60ms; }
+tbody tr:nth-child(2)  { animation-delay: 110ms; }
+tbody tr:nth-child(3)  { animation-delay: 160ms; }
+tbody tr:nth-child(4)  { animation-delay: 210ms; }
+tbody tr:nth-child(5)  { animation-delay: 260ms; }
+tbody tr:nth-child(6)  { animation-delay: 310ms; }
+tbody tr:nth-child(7)  { animation-delay: 360ms; }
+tbody tr:nth-child(8)  { animation-delay: 410ms; }
+
+@keyframes filaEntrada {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Celdas ─────────────────────────────────────────────── */
+tbody td {
+    font-size: 0.85rem;
+    color: #334155;
+    padding: 0.8rem 1rem;
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+/* Nombre del producto — más prominente */
+tbody td:first-child {
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 0.875rem;
+}
+
+/* Categoría — pill badge */
+tbody td:nth-child(2) {
+    padding-right: 1rem;
+}
+
+tbody td:nth-child(2)::after {
+    content: attr(data-cat);
+}
+
+.categoria-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: #e8f1fb;
+    color: #1e50a2;
+    border: 1px solid rgba(46, 117, 182, 0.18);
+    white-space: nowrap;
+}
+
+/* Unidades — fuente mono */
+tbody td:nth-child(3) {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* Total — destacado en azul, mono */
+tbody td:last-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2e75b6;
+    text-align: right;
+    letter-spacing: -0.01em;
+}
+
+/* ─── Scroll en mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+    .tabla-contenedor {
+        padding: 1.25rem 1rem;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 480px;
+    }
+}

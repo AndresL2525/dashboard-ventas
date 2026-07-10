@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { SeccionId } from "./components/Sidebar";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
@@ -25,9 +25,10 @@ function App() {
   const [seccionActiva, setSeccionActiva] = useState<SeccionId>("inicio");
   const [productos, setProductos] = useState<Producto[]>(productosIniciales);
 
-  // Si la sección activa deja de estar permitida (ej: cambió de rol), volver a Inicio
-  useEffect(() => {
-    if (!usuario) return;
+  // Verifica permisos para una sección
+  const puedeAcceder = (seccion: SeccionId): boolean => {
+    if (!usuario) return false;
+    
     const permisosSeccion: Record<SeccionId, boolean> = {
       inicio: true,
       productos: true,
@@ -36,10 +37,18 @@ function App() {
       configuracion: tienePermiso(["administrador"]),
       usuarios: tienePermiso(["administrador"]),
     };
-    if (!permisosSeccion[seccionActiva]) {
+    
+    return permisosSeccion[seccion];
+  };
+
+  // Maneja la selección de sección (permiso check ANTES de cambiar estado)
+  const manejarSeleccionSeccion = (seccion: SeccionId) => {
+    if (puedeAcceder(seccion)) {
+      setSeccionActiva(seccion);
+    } else {
       setSeccionActiva("inicio");
     }
-  }, [usuario, seccionActiva, tienePermiso]);
+  };
 
   const agregarProducto = (nuevo: Omit<Producto, "id">) => {
     const nuevoId =
@@ -104,7 +113,7 @@ function App() {
     <div className="app-layout">
       <Sidebar
         seccionActiva={seccionActiva}
-        onSeleccionarSeccion={setSeccionActiva}
+        onSeleccionarSeccion={manejarSeleccionSeccion}
       />
       <div className="app-contenido">
         <Header notificaciones={3} />

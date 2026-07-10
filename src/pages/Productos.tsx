@@ -68,7 +68,7 @@ function Productos({
         <h1>Productos</h1>
 
         {puedeEditar && (
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="productos-botones">
             <button className="btn-restablecer" onClick={onRestablecer}>
               ↻ Restablecer
             </button>
@@ -164,6 +164,7 @@ function Productos({
 
       {mostrarFormulario && puedeEditar && (
         <FormularioProducto
+          key={productoEditar?.id ?? 'nuevo'}
           productoEditar={productoEditar}
           onGuardar={guardarProducto}
           onCancelar={() => {

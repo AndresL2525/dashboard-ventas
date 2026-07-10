@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Producto } from '../types';
 import './FormularioProducto.css';
 
@@ -27,23 +27,16 @@ function FormularioProducto({
   onGuardar,
   onCancelar,
 }: FormularioProductoProps) {
-  const [datos, setDatos] = useState<FormularioData>(datosVacios);
+  // Initialize state from prop (no effect needed - key handles remount)
+  const [datos, setDatos] = useState<FormularioData>(() => 
+    productoEditar ? {
+      nombre: productoEditar.nombre,
+      categoria: productoEditar.categoria,
+      unidadesVendidas: productoEditar.unidadesVendidas,
+      precioUnitario: productoEditar.precioUnitario,
+    } : datosVacios
+  );
   const [errores, setErrores] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (productoEditar) {
-      setDatos({
-        nombre: productoEditar.nombre,
-        categoria: productoEditar.categoria,
-        unidadesVendidas: productoEditar.unidadesVendidas,
-        precioUnitario: productoEditar.precioUnitario,
-      });
-    } else {
-      setDatos(datosVacios);
-    }
-
-    setErrores([]);
-  }, [productoEditar]);
 
   const cambiarCampo = <K extends keyof FormularioData>(
     campo: K,

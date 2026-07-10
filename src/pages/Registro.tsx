@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import type { Rol } from "../types";
 import "./Auth.css";
 
 interface RegistroProps {
@@ -12,7 +11,6 @@ interface DatosRegistro {
   email: string;
   password: string;
   confirmarPassword: string;
-  rol: Rol;
 }
 
 const datosVacios: DatosRegistro = {
@@ -20,7 +18,6 @@ const datosVacios: DatosRegistro = {
   email: "",
   password: "",
   confirmarPassword: "",
-  rol: "visualizador",
 };
 
 function Registro(props: RegistroProps) {
@@ -53,11 +50,14 @@ function Registro(props: RegistroProps) {
       return;
     }
 
+    // El registro público siempre crea la cuenta con el rol de menor
+    // privilegio. Solo un administrador puede promover a otros roles
+    // desde la sección de Usuarios. Nunca se permite elegir el rol aquí.
     const resultado = registrarUsuario({
       nombre: datos.nombre,
       email: datos.email,
       password: datos.password,
-      rol: datos.rol,
+      rol: "visualizador",
     });
 
     if (resultado.ok) {
@@ -109,18 +109,6 @@ function Registro(props: RegistroProps) {
             value={datos.confirmarPassword}
             onChange={(e) => cambiar("confirmarPassword", e.target.value)}
           />
-        </div>
-
-        <div className="auth-campo">
-          <label>Rol</label>
-          <select
-            value={datos.rol}
-            onChange={(e) => cambiar("rol", e.target.value as Rol)}
-          >
-            <option value="visualizador">Visualizador</option>
-            <option value="vendedor">Vendedor</option>
-            <option value="administrador">Administrador</option>
-          </select>
         </div>
 
         {error && <div className="auth-error">⚠️ {error}</div>}

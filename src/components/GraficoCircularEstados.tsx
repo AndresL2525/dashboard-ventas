@@ -70,18 +70,6 @@ const LabelPersonalizado = ({ cx, cy, midAngle, innerRadius, outerRadius, percen
     );
 };
 
-// ✅ Texto central del donut
-const CentroDonut = ({ cx, cy, total }: { cx: number; cy: number; total: number }) => (
-    <>
-        <text x={cx} y={cy - 10} textAnchor="middle" fill="#111827" fontSize={28} fontWeight={800}>
-            {total}
-        </text>
-        <text x={cx} y={cy + 14} textAnchor="middle" fill="#9ca3af" fontSize={12} fontWeight={500}>
-            pedidos
-        </text>
-    </>
-);
-
 let total = 0;
 
 function GraficoCircularEstados(props: GraficoCircularEstadosProps) {
@@ -307,7 +295,7 @@ function GraficoCircularEstados(props: GraficoCircularEstadosProps) {
                 gap: "8px"
             }}>
                 <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                    {datos.map((d, i) => {
+                    {datos.map((d) => {
                         const cfg = COLORES_ESTADO[d.nombre] ?? COLOR_DEFAULT;
                         return (
                             <div key={d.nombre} style={{ display: "flex", alignItems: "center", gap: "6px" }}>

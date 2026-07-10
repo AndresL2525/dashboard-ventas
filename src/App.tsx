@@ -3,9 +3,9 @@ import { useState } from "react";
 import type { SeccionId } from "./components/Sidebar";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import Inicio from "./pages/inicio";
+import Inicio from "./pages/Inicio";
 import Productos from "./pages/Productos";
-import Pedidos from "./pages/pedidos";
+import Pedidos from "./pages/Pedidos";
 import Analisis from "./pages/Analisis";
 import Configuracion from "./pages/Configuracion";
 import Usuarios from "./pages/Usuarios";
@@ -83,6 +83,14 @@ function App() {
   }
 
   const renderizarSeccion = () => {
+    // Guard defensivo: aunque la navegación por Sidebar ya filtra por
+    // permisos, verificamos también aquí para que un estado inesperado
+    // nunca renderice una sección restringida. (La autorización real
+    // debe vivir en un backend; esto solo protege la UI.)
+    if (!puedeAcceder(seccionActiva)) {
+      return <Inicio productos={productos} />;
+    }
+
     switch (seccionActiva) {
       case "inicio":
         return <Inicio productos={productos} />;

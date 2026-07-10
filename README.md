@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# Dashboard de Ventas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de tablero (dashboard) de ventas construida como **SPA** con **React 19 + TypeScript + Vite**. Permite iniciar sesión, visualizar KPIs, productos, pedidos, gráficos de análisis y gestionar usuarios según su rol.
 
-Currently, two official plugins are available:
+> ⚠️ **Proyecto de práctica / demostración.** La autenticación y autorización se resuelven **por completo en el navegador** y los datos son estáticos o se guardan en `localStorage`. **No es apto para producción tal cual.** Ver [Limitaciones conocidas](#limitaciones-conocidas).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías
 
-## React Compiler
+- **React 19** + **TypeScript**
+- **Vite** (dev server, build)
+- **Recharts** para los gráficos
+- **ESLint** + **React Doctor** (CI) para calidad
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Requisitos
 
-## Expanding the ESLint configuration
+- Node.js 18+ y npm
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Puesta en marcha
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install      # instalar dependencias
+npm run dev      # servidor de desarrollo (http://localhost:5173)
+npm run build    # build de producción (tsc + vite build)
+npm run preview  # previsualizar el build
+npm run lint     # ejecutar ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usuarios de prueba
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Rol            | Email                | Contraseña   |
+|----------------|----------------------|--------------|
+| Administrador  | admin@ventas.com     | admin123     |
+| Vendedor       | vendedor@ventas.com  | vendedor123  |
+| Visualizador   | visor@ventas.com     | visor123     |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Estas credenciales son solo para desarrollo y están definidas en `src/data/usuarios.ts`.
+
+## Roles y permisos
+
+| Sección       | Administrador | Vendedor | Visualizador |
+|---------------|:-------------:|:--------:|:------------:|
+| Inicio        | ✅ | ✅ | ✅ |
+| Productos     | ✅ | ✅ | ✅ |
+| Pedidos       | ✅ | ✅ | ✅ |
+| Análisis      | ✅ | ❌ | ✅ |
+| Configuración | ✅ | ❌ | ❌ |
+| Usuarios      | ✅ | ❌ | ❌ |
+
+El registro público siempre crea la cuenta con rol **Visualizador**; solo un administrador puede promover a otros roles desde la sección **Usuarios**.
+
+## Estructura del proyecto
+
 ```
+src/
+├── App.tsx                 # Layout y enrutamiento por estado (sin React Router)
+├── main.tsx                # Punto de entrada; monta AuthProvider
+├── context/AuthContext.tsx # Auth, roles y persistencia en localStorage
+├── data/                   # Datos mock (productos, pedidos, usuarios)
+├── types/                  # Tipos e interfaces del dominio
+├── components/             # Sidebar, Header, tarjetas, gráficos, tablas
+└── pages/                  # Vistas: Inicio, Productos, Pedidos, Análisis,
+                            #         Configuración, Usuarios, Login, Registro
+```
+
+## Limitaciones conocidas
+
+- **Sin backend.** No hay API ni base de datos; los datos viven en memoria o en `localStorage`.
+- **Seguridad solo cosmética.** La autenticación/autorización es del lado del cliente y puede eludirse desde DevTools. No usar con datos reales.
+- **Contraseñas en texto plano** en `localStorage`. En un sistema real deben hashearse en el servidor.
+- **Persistencia parcial.** Usuarios y sesión persisten; los productos y la configuración se reinician al recargar.
+- **Sin pruebas automatizadas** todavía.
+
+Para llevar esto a producción se requiere, como mínimo, un backend real de autenticación/autorización con hashing de contraseñas y validación de cada acción sensible en el servidor.
